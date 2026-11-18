@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#101f31">
-<meta name="description" content="250 original respiratory-care single-best-answer mock questions, four exam papers, timed exams, calculator, detailed answer review.">
+<meta name="description" content="350 original respiratory-care questions across seven papers, including four 100-question practice exams and two shuffled remix papers.">
 <title>RespiCore | Respiratory Care Mock Examination</title>
 <style>
 :root{--navy:#101f31;--navy2:#193044;--ink:#142435;--muted:#697b8e;--teal:#12a99b;--darkteal:#087e79;--mint:#d8f8ef;--sky:#eef6fb;--border:#dce7ee;--bg:#f5f8fb;--white:#fff;--red:#ca554c;--amber:#d69731;--shadow:0 12px 34px #1b42651a;--radius:22px}
@@ -4314,9 +4314,44 @@
     }
   ]
 }</script>
+<script src="practice2.js"></script>
 <script>
 'use strict';
 const BANK=JSON.parse(document.getElementById('questionbank').textContent);
+const practice2=window.RESPI_PRACTICE_2;
+if(!Array.isArray(practice2)||practice2.length!==100||practice2.some(q=>q.examId!=='practice2'||q.options.length!==4||![0,1,2,3].includes(q.correct))){
+  throw new Error('Practice Exam 2 question bank failed validation');
+}
+const examOne=BANK.exams.find(e=>e.id==='simulator');
+examOne.title='Practice Exam 1';
+examOne.subtitle='100 mixed-difficulty questions';
+examOne.description='Original 100-question full-length simulator with fundamentals, clinical applications and challenging cases.';
+const newPaper=(id,title,description)=>({id,title,subtitle:'100 mixed-difficulty questions',level:'Mixed',timeMinutes:120,count:100,description,icon:'graduation-cap'});
+const examTwo=newPaper('practice2','Practice Exam 2','100 additional original questions: 30 easy, 35 intermediate and 35 hard, including calculation problems.');
+const examThree=newPaper('practice3','Practice Exam 3','100 repeated questions from Practice Exams 1 and 2, with shuffled question order and answer choices.');
+const examFour=newPaper('practice4','Practice Exam 4','A different 100-question remix of Practice Exams 1 and 2, with shuffled questions and answers.');
+function seededShuffle(items,seed){
+  const a=[...items];let x=seed>>>0;
+  for(let i=a.length-1;i>0;i--){
+    x^=x<<13;x^=x>>>17;x^=x<<5;
+    const j=(x>>>0)%(i+1);[a[i],a[j]]=[a[j],a[i]];
+  }
+  return a;
+}
+function buildRemix(items,id,seed){
+  const result=items.map((q,i)=>{
+    const order=seededShuffle([0,1,2,3],seed+i*8191);
+    if(order.indexOf(q.correct)===q.correct)order.push(order.shift());
+    return {...q,id:id+'-'+q.id,examId:id,options:order.map(n=>q.options[n]),correct:order.indexOf(q.correct)};
+  });
+  return seededShuffle(result,seed+10947);
+}
+const shuffledOne=seededShuffle(BANK.questions.filter(q=>q.examId==='simulator'),20261118);
+const shuffledTwo=seededShuffle(practice2,29112026);
+const mixThree=buildRemix([...shuffledOne.slice(0,50),...shuffledTwo.slice(0,50)],'practice3',32026);
+const mixFour=buildRemix([...shuffledOne.slice(50),...shuffledTwo.slice(50)],'practice4',42026);
+BANK.questions.push(...practice2,...mixThree,...mixFour);
+BANK.exams=[examOne,examTwo,examThree,examFour,...BANK.exams.filter(e=>e.id!=='simulator')];
 const EXAMS=BANK.exams;
 const QUESTIONS=BANK.questions;
 const BY_ID=Object.fromEntries(EXAMS.map(e=>[e.id,QUESTIONS.filter(q=>q.examId===e.id)]));
@@ -4332,7 +4367,7 @@ const counts=id=>{const s=store[id];const qs=BY_ID[id];return{answered:s?qs.filt
 const getExam=()=>EXAMS.find(e=>e.id===view.examId);
 const getSession=()=>store[view.examId];
 const getQ=()=>BY_ID[view.examId][view.idx];
-const iconSet={foundation:'◈',clinical:'✚',advanced:'◉',simulator:'▣'};
+const iconSet={foundation:'◈',clinical:'✚',advanced:'◉',simulator:'▣',practice2:'▦',practice3:'↝',practice4:'⤨'};
 function toast(message){el('toastRoot').innerHTML=`<div class="toast">${esc(message)}</div>`;setTimeout(()=>{el('toastRoot').innerHTML=''},2200)}
 function goHome(){view={page:'home',examId:null,idx:0,filter:'all'};render();window.scrollTo(0,0)}
 function start(examId,timed=true){
@@ -4355,9 +4390,9 @@ function renderHome(){
   const finished=EXAMS.filter(e=>store[e.id]?.status==='submitted').length;
   const totalCorrect=EXAMS.reduce((a,e)=>a+(resultFor(e.id)?.correct||0),0);
   el('app').innerHTML=`
-  <section class="hero"><div class="herocontent"><div class="eyebrow">Singapore respiratory-care practice</div><h1>Knowledge that<br>supports every breath.</h1><p>Train with 250 original single-best-answer questions based on the NUS/NUH lecture topics, respiratory-care textbooks and Singapore MOH competency framework. Test your knowledge, calculate key values and learn from every answer.</p></div><div class="heroart" aria-hidden="true"><svg width="230" height="205" viewBox="0 0 230 205" fill="none" stroke="#8bf2e0" stroke-width="3" stroke-linecap="round"><path d="M115 15v72m0 0c-21 6-37 22-48 38m48-38c21 6 37 22 48 38"/><path d="M102 86c-12-25-35-27-54-16-19 11-30 40-34 70-4 30 9 46 32 42 32-5 53-20 62-52m20-44c12-25 35-27 54-16 19 11 30 40 34 70 4 30-9 46-32 42-32-5-53-20-62-52"/><path d="M65 126l-20-22m20 22-22 20m36-36-8-23m94 39 20-22m-20 22 22 20m-36-36 8-23" stroke-width="2"/></svg></div></section>
-  <div class="stats"><div class="stat"><div><div class="statnum">250</div><div class="statlabel">Original questions</div></div><span class="staticon">▤</span></div><div class="stat"><div><div class="statnum">4</div><div class="statlabel">Practice papers</div></div><span class="staticon">◫</span></div><div class="stat"><div><div class="statnum">53</div><div class="statlabel">Calculation questions</div></div><span class="staticon">⌗</span></div><div class="stat"><div><div class="statnum">${finished}<span style="font-size:17px;color:#9aadb8">/4</span></div><div class="statlabel">Papers completed</div></div><span class="staticon">✓</span></div></div>
-  <div class="sectiontitle"><div><h2>Choose your examination</h2><p>Work through each difficulty level, then attempt the full 100-question simulation.</p></div><span class="pill">Single best answer • 4 choices</span></div><section class="examgrid">${EXAMS.map(e=>{const s=store[e.id];const c=counts(e.id);const r=resultFor(e.id);const b=s?.status==='running'?'Resume paper':r?'Review result':'Start exam';return`<article class="examcard"><div class="examtop"><span class="examicon">${iconSet[e.id]}</span><span class="level ${e.level.toLowerCase()}">${esc(e.level)}</span></div><h3>${esc(e.title)}</h3><p class="subtitle">${esc(e.subtitle)}</p><p class="description">${esc(e.description)}</p><div class="exambottom"><span class="detail"><b>◷</b> ${e.timeMinutes} min</span><span class="detail"><b>◻</b> ${e.count} MCQs</span>${s?`<span class="detail"><b>${r?esc(r.percent+'% score'):esc(c.answered+'/'+c.total+' answered')}</b></span>`:''}<div class="cardactions"><button class="btn ${r?'secondary':'primary'}" data-open="${e.id}">${b} ${r?'↗':'→'}</button>${r?`<button class="btn outline" data-retry="${e.id}">Retake</button>`:''}</div></div></article>`}).join('')}</section>
+  <section class="hero"><div class="herocontent"><div class="eyebrow">Singapore respiratory-care practice</div><h1>Knowledge that<br>supports every breath.</h1><p>Train with 350 original respiratory-care questions based on NUS/NUH lectures, textbooks and Singapore MOH competencies. Four 100-question Practice Exams include two fresh papers and two shuffled remix papers.</p></div><div class="heroart" aria-hidden="true"><svg width="230" height="205" viewBox="0 0 230 205" fill="none" stroke="#8bf2e0" stroke-width="3" stroke-linecap="round"><path d="M115 15v72m0 0c-21 6-37 22-48 38m48-38c21 6 37 22 48 38"/><path d="M102 86c-12-25-35-27-54-16-19 11-30 40-34 70-4 30 9 46 32 42 32-5 53-20 62-52m20-44c12-25 35-27 54-16 19 11 30 40 34 70 4 30-9 46-32 42-32-5-53-20-62-52"/><path d="M65 126l-20-22m20 22-22 20m36-36-8-23m94 39 20-22m-20 22 22 20m-36-36 8-23" stroke-width="2"/></svg></div></section>
+  <div class="stats"><div class="stat"><div><div class="statnum">350</div><div class="statlabel">Original questions</div></div><span class="staticon">▤</span></div><div class="stat"><div><div class="statnum">7</div><div class="statlabel">Exam papers</div></div><span class="staticon">◫</span></div><div class="stat"><div><div class="statnum">84</div><div class="statlabel">Unique calculation questions</div></div><span class="staticon">⌗</span></div><div class="stat"><div><div class="statnum">${finished}<span style="font-size:17px;color:#9aadb8">/7</span></div><div class="statlabel">Papers completed</div></div><span class="staticon">✓</span></div></div>
+  <div class="sectiontitle"><div><h2>Choose your examination</h2><p>Start with four 100-question Practice Exams, or choose one of the three 50-question difficulty papers.</p></div><span class="pill">Single best answer • 4 choices</span></div><section class="examgrid">${EXAMS.map(e=>{const s=store[e.id];const c=counts(e.id);const r=resultFor(e.id);const b=s?.status==='running'?'Resume paper':r?'Review result':'Start exam';return`<article class="examcard"><div class="examtop"><span class="examicon">${iconSet[e.id]}</span><span class="level ${e.level.toLowerCase()}">${esc(e.level)}</span></div><h3>${esc(e.title)}</h3><p class="subtitle">${esc(e.subtitle)}</p><p class="description">${esc(e.description)}</p><div class="exambottom"><span class="detail"><b>◷</b> ${e.timeMinutes} min</span><span class="detail"><b>◻</b> ${e.count} MCQs</span>${s?`<span class="detail"><b>${r?esc(r.percent+'% score'):esc(c.answered+'/'+c.total+' answered')}</b></span>`:''}<div class="cardactions"><button class="btn ${r?'secondary':'primary'}" data-open="${e.id}">${b} ${r?'↗':'→'}</button>${r?`<button class="btn outline" data-retry="${e.id}">Retake</button>`:''}</div></div></article>`}).join('')}</section>
   <aside class="note"><b>How it works.</b> Select timed or untimed mode. Use the question navigator to move between questions, flag items, and access the calculator. Answers remain hidden until final submission; afterwards you can review every question, the correct choice, the explanation and topic-specific accuracy. Your progress is stored in this browser. These are independent practice papers, not official NUS examination questions or a representation of an official pass mark.</aside>`;
   el('app').querySelectorAll('[data-open]').forEach(b=>b.onclick=()=>{const id=b.dataset.open;const s=store[id];if(s?.status==='running')start(id);else if(s?.status==='submitted')showResults(id);else toggleTimeAndStart(id)});
   el('app').querySelectorAll('[data-retry]').forEach(b=>b.onclick=()=>toggleTimeAndStart(b.dataset.retry));
