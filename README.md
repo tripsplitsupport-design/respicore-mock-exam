@@ -8,10 +8,10 @@ Responsive practice site for respiratory care exam preparation, using original s
 
 | Paper | Questions | Difficulty | Time limit | Content |
 | --- | ---: | --- | ---: | --- |
-| Practice Exam 1 | 100 | Mixed | 120 minutes | Original full-length mock examination |
-| Practice Exam 2 | 100 | Mixed | 120 minutes | 100 additional original questions (30 easy, 35 intermediate, 35 hard) |
-| Practice Exam 3 | 100 | Mixed | 120 minutes | 50 questions reused from Exam 1 and 50 from Exam 2; question/option order shuffled |
-| Practice Exam 4 | 100 | Mixed | 120 minutes | The other 50 from Exam 1 and 50 from Exam 2; question/option order shuffled |
+| Practise Exam 1 | 100 | Mixed | 120 minutes | Original full-length mock examination |
+| Practise Exam 2 | 100 | Mixed | 120 minutes | 100 additional original questions (30 easy, 35 intermediate, 35 hard) |
+| Practise Exam 3 | 100 | Mixed | 120 minutes | 50 questions reused from Exam 1 and 50 from Exam 2; question/option order shuffled |
+| Practise Exam 4 | 100 | Mixed | 120 minutes | The other 50 from Exam 1 and 50 from Exam 2; question/option order shuffled |
 | Foundation | 50 | Easy | 60 minutes | Core knowledge |
 | Clinical Application | 50 | Intermediate | 60 minutes | Clinical application |
 | Advanced Reasoning | 50 | Hard | 60 minutes | Calculations and higher-order reasoning |
