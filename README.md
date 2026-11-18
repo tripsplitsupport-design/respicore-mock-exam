@@ -1,18 +1,35 @@
-# RespiCore — Singapore Respiratory Care Mock Exam
+# RespiCore — Singapore Respiratory Care Mock Examination
 
-A responsive, standalone exam website for adult respiratory care training. The site includes four original single-best-answer practice papers (50 easy, 50 intermediate, 50 hard, and 100 mixed-difficulty questions) with a calculator, timer, question flagging, score reports, question-by-question rationales, and local progress storage.
+**Live website:** https://tripsplitsupport-design.github.io/respicore-mock-exam/
 
-> Independent practice material based on respiratory care education references. Not an official National University of Singapore examination or an official NUS product.
+Responsive practice site for respiratory care exam preparation, using original single-best-answer questions based on NUS/NUH teaching materials, Egan’s *Fundamentals of Respiratory Care*, the Intensive Care Foundation handbook, and Singapore MOH respiratory care competencies (2022).
 
-## Publish on GitHub Pages
+## Exam papers
 
-1. Create a **new public repository**, named `respicore-mock-exam`, at <https://github.com/new>. Do not use the repositories for the user's other apps.
-2. Upload the `index.html`, `.nojekyll`, and `README.md` files from this package to the root of the new repository's `main` branch.
-3. Open **Settings → Pages**. Under **Build and deployment**, choose **Deploy from a branch**, branch **main**, folder **/(root)**, and **Save**.
-4. Once published, obtain the *actual live site URL* from **Settings → Pages → Visit site**. Do not share an unverified predicted URL.
+| Paper | Questions | Difficulty | Time limit | Content |
+| --- | ---: | --- | ---: | --- |
+| Practice Exam 1 | 100 | Mixed | 120 minutes | Original full-length mock examination |
+| Practice Exam 2 | 100 | Mixed | 120 minutes | 100 additional original questions (30 easy, 35 intermediate, 35 hard) |
+| Practice Exam 3 | 100 | Mixed | 120 minutes | 50 questions reused from Exam 1 and 50 from Exam 2; question/option order shuffled |
+| Practice Exam 4 | 100 | Mixed | 120 minutes | The other 50 from Exam 1 and 50 from Exam 2; question/option order shuffled |
+| Foundation | 50 | Easy | 60 minutes | Core knowledge |
+| Clinical Application | 50 | Intermediate | 60 minutes | Clinical application |
+| Advanced Reasoning | 50 | Hard | 60 minutes | Calculations and higher-order reasoning |
 
-The exam functions without a backend or paid services and adapts to phones, tablets, Windows PCs and Macs. Saved answers/results remain in each browser's local storage. Clearing storage, private browsing, changing browsers, or switching devices will not transfer progress.
+350 distinct original questions; 550 practice question appearances across all papers, with 84 unique calculation questions. Exams 3 and 4 repeat the original question stems from Exams 1 and 2, with answer options reordered and the correct-answer index recalculated.
 
-## Reference themes
+## Features
 
-Clinical respiratory assessment; medical gas therapy; respiratory physiology; airway management; oxygen content and gas exchange; ABG interpretation; invasive and non-invasive mechanical ventilation; triggering, limiting and cycling variables; ventilator scalars, loops and asynchrony; alarms, troubleshooting, weaning and critical care scenarios; and Singapore MOH respiratory care competencies.
+- 100-question timed exams (120 minutes), 50-question timed exams (60 minutes), and untimed practice
+- Question navigator, mark-for-review, progress indicator and in-exam calculator
+- Autosaved progress per device/browser using local storage
+- Final scores and question-by-question answer reviews with explanations and source notes
+- Topic breakdown, retake, print and CSV results export
+- Works on iPhone, Android, iPad, Windows and Mac with modern browsers
+- No login required
+
+This is independent educational practice material, **not an official NUS exam**. Results are stored locally in the browser, not centrally collected. Clearing site data or changing devices may remove local progress.
+
+## Deployment
+
+GitHub Pages deploys automatically on pushes to `main` using `.github/workflows/pages.yml`. `index.html` loads the additional question bank from `practice2.js`.
